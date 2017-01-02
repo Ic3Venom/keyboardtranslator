@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define KEYS    46
-#define LAYOUTS 4
-#define LENGTH  100
+#define TOTAL_KEYS  46
+#define LAYOUTS     4
+#define MAX_LENGTH  50
 
 // Purpose: to translate a string of text from one keyboard layout to another
 // Created by Julian Meyn 12/24/16
@@ -19,7 +19,6 @@ int main()
     int layoutOrder[2];
     layoutSelect(layoutOrder);
 
-    printf("%d %d", layoutOrder[0], layoutOrder[1]);
 
     conversion(layoutOrder);
 
@@ -28,7 +27,7 @@ int main()
 
 void layoutSelect(int layoutOrder[])
 {
-    char userInput[10];
+    char userInput[MAX_LENGTH];
     char layoutSupport[LAYOUTS][8] = {"dvorak","qwerty","colemak","workman"};
     int  i;
 
@@ -91,7 +90,6 @@ void layoutSelect(int layoutOrder[])
         }
     }
 
-    //Probably don't need this anymore
     /*switch(layoutOrder[0])
     {
     case 0:
@@ -111,50 +109,81 @@ void layoutSelect(int layoutOrder[])
 void conversion(int layoutOrder[])
 {
 
-    char  layout[2][KEYS];
-    char  userInput[LENGTH];
+    char    layout[2][TOTAL_KEYS];
+    char    userInput[MAX_LENGTH];
+    char    translatedOutput[MAX_LENGTH];
 
     //Puts each layout into [layout]
     {
-        int   i;
+        int i;
+
         for(i= 0; i < 2; i++)
         {
+            printf("%d", i);
             switch(layoutOrder[i])
             {
             case 0:
                 dvorak(layout, i);
+                break;
             case 1:
                 qwerty(layout, i);
+                break;
             case 2:
                 colemak(layout, i);
+                break;
             case 3:
                 workman(layout, i);
+                break;
             }
         }
     }
-    
-    //Debug
+
     printf("Place your text here:\n$ ");
-    scanf("%s", &userInput);
-    printf("%s", userInput);
+    //WHY DOES THIS FIX THE PROBLEM
+    getchar();
+    fgets (userInput, MAX_LENGTH, stdin);
+
+            printf("\nDEBUG:\n*userInput: %s|", userInput);
+            printf("\n*layout[0]: %s", layout[0]);
+            printf("\n*layout[1]: %s\n", layout[1]);
+
+    //In theory this is easy, but I'm still not the greatest with simple things
+    {
+        int i, j;
+
+        for(i= 0; i < MAX_LENGTH; i++)
+        {
+            for(j= 0; j < TOTAL_KEYS; j++)
+            {
+                if (userInput[i] == layout[0][j])
+                {
+                    printf("pop\n");
+                    translatedOutput[i] = layout[1][j];
+                    break;
+                }
+
+            }
+        }
+    }
+    printf("%s", translatedOutput);
 }
 
-void dvorak (char layout[][46], int i)
+void dvorak (char layout[][TOTAL_KEYS], int i)
 {
-    strncpy(layout[i], "1234567890[]',.pyfgcrl/=aoeuidhtns-;qjkxbmwvz", KEYS);
+    strncpy(layout[i], "1234567890[]',.pyfgcrl/=aoeuidhtns-;qjkxbmwvz", TOTAL_KEYS);
 }
 
-void qwerty (char layout[][46], int i)
+void qwerty (char layout[][TOTAL_KEYS], int i)
 {
-    strncpy(layout[i], "1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./", KEYS);
+    strncpy(layout[i], "1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./", TOTAL_KEYS);
 }
 
-void colemak(char layout[][46], int i)
+void colemak(char layout[][TOTAL_KEYS], int i)
 {
-    strncpy(layout[i], "1234567890-=qwfpgjluy;{}arstdhneio'zxcvbkm,./", KEYS);
+    strncpy(layout[i], "1234567890-=qwfpgjluy;{}arstdhneio'zxcvbkm,./", TOTAL_KEYS);
 }
 
-void workman(char layout[][46], int i)
+void workman(char layout[][TOTAL_KEYS], int i)
 {
-    strncpy(layout[i], "1234567890-=qdrwbjfup;{}ashtgyneoi'zxmcvkl,./", KEYS);
+    strncpy(layout[i], "1234567890-=qdrwbjfup;{}ashtgyneoi'zxmcvkl,./", TOTAL_KEYS);
 }
