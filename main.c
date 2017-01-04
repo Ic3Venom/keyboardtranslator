@@ -1,28 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define TOTAL_KEYS  95
+
+#define TOTAL_KEYS  96
 #define LAYOUTS     4
-#define MAX_LENGTH  50
+#define MAX_LENGTH  64
 
 // Purpose: to translate a string of text from one keyboard layout to another
 // Created by Julian Meyn 12/24/16
 
 void layoutSelect(int layoutOrder[]);
 void conversion  (int layoutOrder[]);
-void dvorak      (char layout[][TOTAL_KEYS], int i);
-void qwerty      (char layout[][TOTAL_KEYS], int i);
-void colemak     (char layout[][TOTAL_KEYS], int i);
-void workman     (char layout[][TOTAL_KEYS], int i);
+int  dvorak      (char layout[][TOTAL_KEYS], int i);
+int  qwerty      (char layout[][TOTAL_KEYS], int i);
+int  colemak     (char layout[][TOTAL_KEYS], int i);
+int  workman     (char layout[][TOTAL_KEYS], int i);
 
 int main()
 {
     int layoutOrder[2];
 
     layoutSelect(layoutOrder);
-
     conversion(layoutOrder);
 
-    return 0;
+    return 1;
 }
 
 void layoutSelect(int layoutOrder[])
@@ -88,57 +88,46 @@ void layoutSelect(int layoutOrder[])
             printf("Unknown input \"%s\". Try again (type \"quit\" to leave).\n$ ", userInput);
         }
     }
-
-    /*switch(layoutOrder[0])
-    {
-    case 0:
-        dvorak(layoutOrder[1]);
-    case 1:
-        qwerty(layoutOrder[1]);
-    case 2:
-        colemak(layoutOrder[1]);
-    case 3:
-        workman(layoutOrder[1]);
-    default:
-        printf("Something went wrong! Please close and restart the program.");
-        exit(404);
-    }*/
 }
 
 void conversion(int layoutOrder[])
 {
 
     char    layout[2][TOTAL_KEYS];
-    char    userInput[MAX_LENGTH];
+    char    userInput[MAX_LENGTH] = {0};
     char    translatedOutput[MAX_LENGTH];
+    int     offset[2] = {25};
     int     i, j;
-
-    //Puts each layout into [layout]
-    for(i = 0; i < 2; i++)
-    {
-        printf("%d", i);
-        switch(layoutOrder[i])
-        {
-        case 0:
-            dvorak(layout, i);
-            break;
-        case 1:
-            qwerty(layout, i);
-            break;
-        case 2:
-            colemak(layout, i);
-            break;
-        case 3:
-            workman(layout, i);
-            break;
-        }
-    }
 
     printf("Place your text here:\n$ ");
     //WHY DOES THIS FIX THE PROBLEM
     getchar();
     fgets (userInput, MAX_LENGTH, stdin);
 
+    //Puts each layout into [layout]
+    for(i = 0; i < 2; i++)
+    {
+        switch(layoutOrder[i])
+        {
+        case 0:
+            offset[1] = dvorak(layout, i);
+            break;
+        case 1:
+            offset[1] = qwerty(layout, i);
+            break;
+        case 2:
+            offset[1] = colemak(layout, i);
+            break;
+        case 3:
+            offset[1] = workman(layout, i);
+            break;
+        default:
+            printf("Something went wrong! Please restart the program and try again.");
+            exit(-1);
+        }
+    }
+
+    //The most important thing
     for(i = 0; i < MAX_LENGTH; i++)
     {
 
@@ -147,6 +136,11 @@ void conversion(int layoutOrder[])
 
             if (userInput[i] == layout[0][j])
             {
+                if (j == offset[0] || j == offset[1])
+                {
+                    j++;
+                }
+
                 printf("%c", layout[1][j]);
                 break;
             }
@@ -154,26 +148,26 @@ void conversion(int layoutOrder[])
     }
 }
 
-void dvorak (char layout[][TOTAL_KEYS], int i)
+int dvorak (char layout[][TOTAL_KEYS], int i)
 {
-    //!@#$%^&*(){}\"<>PYFGCRL?+\AOEUIDHTNS_:QJKXBMWVZ
-    strncpy(layout[i], " 1234567890[]',.pyfgcrl/=\aoeuidhtns-;qjkxbmwvz", TOTAL_KEYS);
+    strncpy(layout[i], " 1234567890[]',.pyfgcrl/=\\aoeuidhtns-;qjkxbmwvz!@#$%^&*(){}\"<>PYFGCRL?+|AOEUIDHTNS_:QJKXBMWVZ", TOTAL_KEYS);
+    return 58;
 }
 
-void qwerty (char layout[][TOTAL_KEYS], int i)
+int qwerty (char layout[][TOTAL_KEYS], int i)
 {
-    //!@#$%^&*()_+QWERTYUIOP{}\ASDFGHJKL:\"ZXCVBNM<>?
-    strncpy(layout[i], " 1234567890-=qwertyuiop[]\asdfghjkl;'zxcvbnm,./", TOTAL_KEYS);
+    strncpy(layout[i], " 1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?", TOTAL_KEYS);
+    return 85;
 }
 
-void colemak(char layout[][TOTAL_KEYS], int i)
+int colemak(char layout[][TOTAL_KEYS], int i)
 {
-    //!@#$%^&*()_+QWFPGJLUY:{}\ARSTDHNEIO\"ZXCVBXM<>?
-    strncpy(layout[i], " 1234567890-=qwfpgjluy;[]\arstdhneio'zxcvbkm,./", TOTAL_KEYS);
+    strncpy(layout[i], " 1234567890-=qwfpgjluy;[]\\arstdhneio'zxcvbkm,./!@#$%^&*()_+QWFPGJLUY:{}|ARSTDHNEIO\"ZXCVBXM<>?", TOTAL_KEYS);
+    return 85;
 }
 
-void workman(char layout[][TOTAL_KEYS], int i)
+int workman(char layout[][TOTAL_KEYS],  int i)
 {
-    //!@#$%^&*()_+QDRWBJFUP:{}\ASHTGYNEOI\"ZXMCVKL<>?
-    strncpy(layout[i], " 1234567890-=qdrwbjfup;[]\ashtgyneoi'zxmcvkl,./", TOTAL_KEYS);
+    strncpy(layout[i], " 1234567890-=qdrwbjfup;[]\\ashtgyneoi'zxmcvkl,./!@#$%^&*()_+QDRWBJFUP:{}\ASHTGYNEOI\"ZXMCVKL<>?", TOTAL_KEYS);
+    return 85;
 }
