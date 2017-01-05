@@ -63,14 +63,14 @@ void layoutSelect(int layoutOrder[])
             layoutOrder[i] = 3;
             i++;
         }
-        else if (strcmp(userInput, "help") == 0)
+        else if (strcmp(userInput, "help") == 0 || strcmp(userInput, "HELP") == 0)
         {
             printf("HELP MENU\nList of commands:\n");
             printf("- \"help\": displays list of available commands\n");
             printf("- \"list\": lists supported layouts\n");
             printf("- \"quit\": exits program.\n$ ");
         }
-        else if (strcmp(userInput, "list") == 0)
+        else if (strcmp(userInput, "list") == 0 || strcmp(userInput, "LIST"))
         {
             printf("List of supported layouts:\n");
 
@@ -79,7 +79,7 @@ void layoutSelect(int layoutOrder[])
                 printf("%d: %s\n", j +1, layoutSupport[j]);
             }
         }
-        else if (strcmp(userInput, "quit") == 0)
+        else if (strcmp(userInput, "quit") == 0 || strcmp(userInput, "QUIT") == 0 || strcmp(userInput, "q") == 0)
         {
             exit(1);
         }
@@ -127,6 +127,8 @@ void conversion(int layoutOrder[])
         }
     }
 
+    printf("Translated Text:\n");
+    
     //The most important thing
     for(i = 0; i < MAX_LENGTH; i++)
     {
