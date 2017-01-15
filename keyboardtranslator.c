@@ -1,12 +1,15 @@
+/*
+** File: keyboardtranslator.c
+** Purpose: to translate a string of text from one keyboard layout to another
+** Created by Julian Meyn 12/24/16
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #define TOTAL_KEYS  96
 #define LAYOUTS     4
 #define MAX_LENGTH  64
-
-// Purpose: to translate a string of text from one keyboard layout to another
-// Created by Julian Meyn 12/24/16
 
 void layoutSelect(int layoutOrder[]);
 void conversion  (int layoutOrder[]);
