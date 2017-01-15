@@ -1,7 +1,7 @@
 /*
 ** File: keyboardtranslator.c
 ** Purpose: to translate a string of text from one keyboard layout to another
-** Created by Julian Meyn 12/24/16
+** Created by Julian Meyn 12.24.16
 */
 
 #include <stdio.h>
